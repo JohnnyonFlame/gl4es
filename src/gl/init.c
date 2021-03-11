@@ -26,7 +26,7 @@ void fpe_shader_reset_internals();
 
 globals4es_t globals4es = {0};
 
-#if defined(PANDORA) || defined(CHIP)
+#if defined(PANDORA) || defined(CHIP) || defined(RK3326)
 static void fast_math() {
   // enable Cortex A8 RunFast
    int v = 0;
@@ -364,7 +364,7 @@ void initialize_gl4es() {
     }
 
     if(IsEnvVarTrue("LIBGL_FASTMATH")) {
-#if defined(PANDORA) || defined(CHIP)
+#if defined(PANDORA) || defined(CHIP) || defined(RK3326)
         SHUT_LOGD("Enable FastMath for cortex-a8\n");
         fast_math();
 #else

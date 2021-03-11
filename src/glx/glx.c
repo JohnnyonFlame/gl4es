@@ -1,6 +1,9 @@
 #include "glx.h"
 #include "../gl/init.h"
 
+#define __USE_GNU
+#include <dlfcn.h>
+
 #ifdef HAS_BACKTRACE
 #include <execinfo.h>
 #endif // HAS_BACKTRACE
@@ -122,6 +125,9 @@ static Display *g_display = NULL;
 static GLXContext glxContext = NULL;
 static GLXContext fbContext = NULL;
 static GLuint current_fb = 0;
+
+#define CHECK_HAS_AXE11() (AXE11_SwapBuffers || (AXE11_SwapBuffers = dlsym(RTLD_DEFAULT, "AXE11_SwapBuffers")))
+void (*AXE11_SwapBuffers)(void *dpy, void *surface) = NULL;
 
 #endif //NOX11
 void glx_getMainFBSize(GLint* width, GLint* height) {
@@ -658,6 +664,7 @@ GLXContext gl4es_glXCreateContext(Display *display,
         ++fbcontext_count;
 
     LOAD_EGL(eglMakeCurrent);
+    LOAD_EGL(eglGetCurrentContext);
     LOAD_EGL(eglDestroyContext);
     LOAD_EGL(eglDestroySurface);
     LOAD_EGL(eglCreateContext);
@@ -703,7 +710,12 @@ GLXContext gl4es_glXCreateContext(Display *display,
         return 0;
     }
     EGLContext shared = (shareList)?shareList->eglContext:EGL_NO_CONTEXT;
+    if (CHECK_HAS_AXE11()) {
+        fake->eglContext = egl_eglGetCurrentContext();
+    }
+	else {
 	fake->eglContext = egl_eglCreateContext(eglDisplay, fake->eglConfigs[fake->eglconfigIdx], shared, (hardext.esversion==1)?egl_context_attrib:egl_context_attrib_es2);
+    }
 
     CheckEGLErrors();
 
@@ -776,7 +788,12 @@ GLXContext createPBufferContext(Display *display, GLXContext shareList, GLXFBCon
     fake->eglConfigsCount = 1;
     fake->eglconfigIdx = 0;
 
+    if (CHECK_HAS_AXE11()) {
+        fake->eglContext = egl_eglGetCurrentContext();
+    }
+    else {
 	fake->eglContext = egl_eglCreateContext(eglDisplay, fake->eglConfigs[0], shared, (hardext.esversion==1)?egl_context_attrib:egl_context_attrib_es2);
+    }
 
     CheckEGLErrors();
 
@@ -1099,6 +1116,9 @@ not set to EGL_NO_CONTEXT.
 Bool gl4es_glXMakeCurrent(Display *display,
                     GLXDrawable drawable,
                     GLXContext context) {
+    if (CHECK_HAS_AXE11())
+        return True;
+    
 #ifdef NOX11
     DBG(printf("glXMakeCurrent(%p, %p, %p), context->drawable=%p, context->eglSurface=%p(%p), context->doublebuff=%d, glxContext=%p\n", display, (void*)drawable, context, (void*)(context?context->drawable:0), context?context->eglSurface:0, eglSurface, context?context->doublebuff:0, glxContext);)
 #else
@@ -1474,8 +1494,13 @@ void gl4es_glXSwapBuffers(Display *display,
         LOAD_GLES(glFinish);
         gles_glFinish();
         BlitEmulatedPixmap(drawable);
-    } else
+    }
+    else {
+        if (CHECK_HAS_AXE11())
+            AXE11_SwapBuffers(eglDisplay, surface);
+        else
         egl_eglSwapBuffers(eglDisplay, surface);
+    }
     //CheckEGLErrors();     // not sure it's a good thing to call a eglGetError() after all eglSwapBuffers, performance wize (plus result is discarded anyway)
 #ifdef PANDORA
     if (globals4es.showfps || (sock>-1))

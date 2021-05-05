@@ -2902,7 +2902,178 @@ const char *gl4es_glXGetClientString(Display *display, int name) {
 }
 
 // New export the Alias
-#ifndef NOX11
+#ifdef NOX11
+GLXContext  gl4es_glXCreateContext(Display *display, XVisualInfo *visual, GLXContext shareList, Bool isDirect)
+{
+
+}
+
+GLXContext  gl4es_glXCreateContextAttribsARB(Display *display, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list)
+{
+
+}
+
+void  gl4es_glXDestroyContext(Display *display, GLXContext ctx)
+{
+
+}
+
+Display  *gl4es_glXGetCurrentDisplay()
+{
+
+}
+
+XVisualInfo  *gl4es_glXChooseVisual(Display *display, int screen, int *attributes)
+{
+
+}
+
+Bool  gl4es_glXMakeCurrent(Display *display, GLXDrawable drawable, GLXContext context)
+{
+
+}
+
+Bool  gl4es_glXMakeContextCurrent(Display *display, int drawable, int readable, GLXContext context)
+{
+
+}
+
+void  gl4es_glXSwapBuffers(Display *display, GLXDrawable drawable)
+{
+
+}
+
+int  gl4es_glXGetConfig(Display *display, XVisualInfo *visual, int attribute, int *value)
+{
+
+}
+
+int  gl4es_glXQueryContext( Display *dpy, GLXContext ctx, int attribute, int *value)
+{
+
+}
+
+GLXContext  gl4es_glXGetCurrentContext()
+{
+
+}
+
+GLXFBConfig  *gl4es_glXChooseFBConfig(Display *display, int screen, const int *attrib_list, int *count)
+{
+
+}
+
+GLXFBConfig  *gl4es_glXChooseFBConfigSGIX(Display *display, int screen, const int *attrib_list, int *count)
+{
+
+}
+
+GLXFBConfig  *gl4es_glXGetFBConfigs(Display *display, int screen, int *count)
+{
+
+}
+
+int  gl4es_glXGetFBConfigAttrib(Display *display, GLXFBConfig config, int attribute, int *value)
+{
+
+}
+
+XVisualInfo  *gl4es_glXGetVisualFromFBConfig(Display *display, GLXFBConfig config)
+{
+
+}
+
+GLXContext  gl4es_glXCreateNewContext(Display *display, GLXFBConfig config, int render_type, GLXContext share_list, Bool is_direct)
+{
+
+}
+
+void  gl4es_glXSwapIntervalEXT(Display *display, int drawable, int interval)
+{
+
+}
+
+void  gl4es_glXCopyContext(Display *display, GLXContext src, GLXContext dst, GLuint mask)
+{
+
+}
+
+Window  gl4es_glXCreateWindow(Display *display, GLXFBConfig config, Window win, int *attrib_list)
+{
+
+}
+
+void  gl4es_glXDestroyWindow(Display *display, void *win)
+{
+
+}
+
+GLXDrawable  gl4es_glXGetCurrentDrawable()
+{
+
+}
+
+Bool  gl4es_glXIsDirect(Display * display, GLXContext ctx)
+{
+
+}
+
+void  gl4es_glXUseXFont(Font font, int first, int count, int listBase)
+{
+
+}
+
+int  gl4es_glXQueryDrawable(Display *dpy, GLXDrawable draw, int attribute, unsigned int *value)
+{
+
+}
+
+void  gl4es_glXDestroyPbuffer(Display * dpy, GLXPbuffer pbuf)
+{
+
+}
+
+GLXPbuffer  gl4es_glXCreatePbuffer(Display * dpy, GLXFBConfig config, const int * attrib_list)
+{
+
+}
+
+GLXPixmap  gl4es_glXCreateGLXPixmap(Display *display, XVisualInfo * visual, Pixmap pixmap)
+{
+
+}
+
+GLXPixmap  gl4es_glXCreatePixmap(Display * dpy, GLXFBConfig config, Pixmap pixmap, const int * attrib_list)
+{
+
+}
+
+void  gl4es_glXDestroyGLXPixmap(Display *display, void *pixmap)
+{
+
+}
+
+void  gl4es_glXDestroyPixmap(Display *display, void *pixmap)
+{
+
+}
+
+GLXContext  gl4es_glXCreateContextAttribs(Display *dpy, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list)
+{
+
+}
+
+void  gl4es_glXSwapIntervalMESA(int interval)
+{
+
+}
+
+void  gl4es_glXSwapIntervalSGI(int interval)
+{
+
+}
+
+#endif
 GLXContext glXCreateContext(Display *display, XVisualInfo *visual, GLXContext shareList, Bool isDirect) AliasExport("gl4es_glXCreateContext");
 GLXContext glXCreateContextAttribsARB(Display *display, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list) AliasExport("gl4es_glXCreateContextAttribsARB");
 void glXDestroyContext(Display *display, GLXContext ctx) AliasExport("gl4es_glXDestroyContext");
@@ -2935,7 +3106,6 @@ GLXPixmap glXCreatePixmap(Display * dpy, GLXFBConfig config, Pixmap pixmap, cons
 void glXDestroyGLXPixmap(Display *display, void *pixmap) AliasExport("gl4es_glXDestroyGLXPixmap");
 void glXDestroyPixmap(Display *display, void *pixmap) AliasExport("gl4es_glXDestroyPixmap");
 GLXContext glXCreateContextAttribs(Display *dpy, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list) AliasExport("gl4es_glXCreateContextAttribs");
-#endif
 
 const char *glXQueryExtensionsString(Display *display, int screen) AliasExport("gl4es_glXQueryExtensionsString");
 const char *glXQueryServerString(Display *display, int screen, int name) AliasExport("gl4es_glXQueryServerString");
